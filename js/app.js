@@ -51,7 +51,7 @@
       console.error(e);
       view.appendChild(h('div', { class: 'card' }, h('h3', { text: 'Oops — something went wrong.' }), h('p', { class: 'muted', text: String(e && e.message || e) }), h('a', { class: 'btn', href: '#/', text: 'Back home' })));
     }
-    window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
   /* ---------- home ---------- */
