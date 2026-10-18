@@ -1780,13 +1780,13 @@
     { lesson: L1, type: 'mcq', q: 'What is the chemical formula of <b>carbon dioxide</b>?', options: [F('CO2'), F('C2O'), F('CO3'), F('CaCO3')], answer: 0,
       explain: 'One carbon atom and <b>two</b> oxygen atoms: ' + F('CO2') + '.' },
     { lesson: L1, type: 'tf', q: 'Water is a liquid at room conditions and its chemical formula is ' + F('H2O') + '.', answer: true,
-      explain: 'Classwork: water, liquid (l), ' + F('H2O') + '.' },
+      explain: 'Water is a liquid at room conditions. Each water molecule has 2 hydrogen atoms and 1 oxygen atom chemically combined, so its formula is ' + F('H2O') + '.' },
     { lesson: L1, type: 'mcq', q: 'Which elements make up <b>calcium carbonate</b> (' + F('CaCO3') + ', limestone)?', options: ['calcium, carbon and oxygen', 'calcium and carbon only', 'calcium, chlorine and oxygen', 'carbon and oxygen only'], answer: 0,
       explain: 'Ca = calcium, C = carbon, O = oxygen.' },
     { lesson: L1, type: 'multi', q: 'Which elements are found in <b>sodium sulphate</b>, ' + F('Na2SO4') + '? Select all.', options: ['sodium', 'sulphur', 'oxygen', 'chlorine', 'calcium'], answer: [0, 1, 2],
       explain: 'Na = sodium, S = sulphur, O = oxygen.' },
     { lesson: L1, type: 'match', q: 'Match each compound with its chemical formula.', pairs: [['sodium chloride', 'NaCl'], ['calcium carbonate', F('CaCO3')], ['sodium sulphate', F('Na2SO4')], ['iron(II) sulphide', 'FeS']],
-      explain: 'From the book’s table of other examples of compounds.' },
+      explain: 'Each formula shows the elements chemically combined: NaCl (sodium, chlorine), ' + F('CaCO3') + ' (calcium, carbon, oxygen), ' + F('Na2SO4') + ' (sodium, sulphur, oxygen), FeS (iron, sulphur).' },
     { lesson: L1, type: 'fill', q: 'Table salt is the compound sodium chloride. Its chemical formula is ___.', answer: ['NaCl'],
       explain: 'Na (sodium) + Cl (chlorine) → NaCl. Remember: capital letter first, then a small letter.' },
     { lesson: L1, type: 'fill', q: 'Limestone is mainly the compound calcium ___ (' + F('CaCO3') + ').', answer: ['carbonate'],
@@ -1843,7 +1843,7 @@
       explain: 'Oxygen is about 21% of air.' },
     { lesson: L2, type: 'multi', q: 'Which of the following are <b>hydrocarbons</b>? Select all.', options: ['methane', 'butane', 'water', 'carbon dioxide'], answer: [0, 1],
       explain: 'Hydrocarbons contain <b>hydrogen and carbon only</b>. Water has no carbon; carbon dioxide has no hydrogen.' },
-    { lesson: L2, type: 'fill', q: 'Bronze is an alloy of copper and ___.', answer: ['tin'],
+    { lesson: L2, type: 'fill', q: 'Bronze is an alloy of copper and ___.', answer: ['tin', 'Sn'],
       explain: 'Bronze = copper + tin.' },
     { lesson: L2, type: 'match', q: 'Match each part of air with its percentage.', pairs: [['nitrogen', '78%'], ['oxygen', '21%'], ['argon', '0.9%'], ['other gases (incl. carbon dioxide, water vapour)', '0.1%']],
       explain: 'Composition of air: nitrogen 78%, oxygen 21%, argon 0.9%, other gases 0.1%.' },
@@ -1868,7 +1868,7 @@
     { lesson: L3, type: 'tf', q: 'Nitrogen (' + F('N2') + ') is a compound because each molecule contains two atoms.', answer: false,
       explain: 'Both atoms are nitrogen: only <b>one kind of atom</b>, so nitrogen is an <b>element</b>.' },
     { lesson: L3, type: 'mcq', q: '<b>Stainless steel</b> (an alloy of iron, carbon, chromium and nickel) is…', options: ['a mixture', 'a compound', 'an element', 'a pure substance'], answer: 0,
-      explain: 'Alloys are mixtures of elements that are not chemically combined.' },
+      explain: 'Alloys are mixtures of elements that are not chemically combined. (The book’s table prints “cobalt”, but the metal added to make steel stainless is chromium. Either way, it is a mixture.)' },
     { lesson: L3, type: 'multi', q: 'Which of the following are <b>pure substances</b>? Select all.', options: ['gold', 'distilled water', 'carbon dioxide', 'rainwater', 'air', 'bronze'], answer: [0, 1, 2],
       explain: 'Elements and compounds are pure substances. Rainwater, air and bronze are mixtures.' },
     { lesson: L3, type: 'match', q: 'Match each word with its meaning.', pairs: [['element', 'only one kind of atom'], ['compound', 'two or more elements chemically combined'], ['mixture', 'two or more pure substances NOT chemically combined']],
@@ -1879,14 +1879,14 @@
       explain: 'Distilled water (' + F('H2O') + ') is a <b>compound</b>; gold, nitrogen and iron each have only one kind of atom.' },
     { lesson: L3, type: 'mcq', q: 'Odd one out: three of these are <b>mixtures</b>. Which one is <b>not</b> a mixture?', options: ['carbon dioxide', 'air', 'bronze', 'sea water'], answer: 0,
       explain: 'Carbon dioxide (' + F('CO2') + ') is a pure <b>compound</b>; air, bronze and sea water are mixtures.' },
-    { lesson: L3, type: 'match', q: 'Match each substance from Classwork 2 with its classification.', pairs: [['gold', 'element'], ['distilled water', 'compound'], ['rainwater', 'mixture']],
-      explain: 'Gold: one kind of atom. Distilled water: pure ' + F('H2O') + '. Rainwater: water + other dissolved substances.' },
-    { lesson: L3, type: 'tf', q: 'A mixture can be separated by physical methods, e.g. iron can be removed from a mixture of iron and sulphur with a magnet.', answer: true,
-      explain: 'A mixture keeps the properties of its constituents, so the iron is still attracted.' },
+    { lesson: L3, type: 'match', q: 'Match each description with the type of substance.', pairs: [['Cannot be broken down into anything simpler by chemical methods', 'element'], ['Has different properties from its constituent elements', 'compound'], ['Keeps the properties of its constituents', 'mixture']],
+      explain: 'An element is the simplest pure substance. A compound has new properties (e.g. iron(II) sulphide is not attracted by a magnet). A mixture keeps the properties of what is in it (e.g. the iron in iron + sulphur is still attracted).' },
+    { lesson: L3, type: 'tf', q: 'A compound can be separated into its constituent elements by physical methods, such as using a magnet.', answer: false,
+      explain: 'The elements in a compound are <b>chemically combined</b>, so physical methods cannot separate them (a magnet does not even attract iron(II) sulphide). It is a <b>mixture</b> that can be separated by physical methods.' },
     { lesson: L3, type: 'multi', q: 'Which of these are <b>mixtures</b>? Select all.', options: ['rainwater', 'stainless steel', 'sea water', 'distilled water', 'gold', 'sodium chloride'], answer: [0, 1, 2],
       explain: 'Distilled water and sodium chloride are compounds; gold is an element.' },
     { lesson: L3, type: 'fill', q: 'A particle diagram shows only one kind of molecule, and each molecule has two different kinds of atom stuck together. It shows a single ___.', answer: ['compound', 'a compound'],
-      explain: 'One kind of particle → pure; different atoms <b>chemically combined</b> → a single <b>compound</b> (like diagram E in Classwork 1).' }
+      explain: 'One kind of particle → pure; different atoms <b>chemically combined</b> → a single <b>compound</b>.' }
   ];
 
   /* =========================================================
@@ -1894,7 +1894,7 @@
      ========================================================= */
   const GLOSSARY = [
     { en: 'Compound', zh: '化合物', def: 'A pure substance that is made up of two or more elements chemically combined.' },
-    { en: 'Mixture', zh: '混合物', def: 'Two or more pure substances (elements or compounds) which are NOT chemically combined.' },
+    { en: 'Mixture', zh: '混合物', def: 'Two or more pure substances (elements or compounds) which are NOT chemically combined, so it contains more than one kind of particle.' },
     { en: 'Chemically combined', zh: '化學結合', def: 'Atoms joined (stuck) together. In a compound, atoms of different elements are chemically combined.' },
     { en: 'Constituent elements', zh: '組成元素', def: 'The elements that make up a compound, e.g. sodium and chlorine in NaCl.' },
     { en: 'Sodium chloride (table salt)', zh: '氯化鈉（食鹽）', def: 'NaCl, a compound of sodium and chlorine.' },

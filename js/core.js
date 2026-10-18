@@ -20,7 +20,13 @@
   function load() {
     try {
       const raw = localStorage.getItem(STORE_KEY);
-      if (raw) state = Object.assign(defaultState(), JSON.parse(raw));
+      if (raw) {
+        const saved = JSON.parse(raw), def = defaultState();
+        state = Object.assign(def, saved);
+        // repair damaged/old saves: nested objects must stay objects, counters numbers
+        for (const k in def) if (def[k] && typeof def[k] === 'object' && (!state[k] || typeof state[k] !== 'object')) state[k] = defaultState()[k];
+        ['xp', 'attempts', 'correct'].forEach(k => { if (typeof state[k] !== 'number' || !isFinite(state[k])) state[k] = 0; });
+      }
     } catch (e) { /* storage unavailable: keep in-memory state */ }
   }
   function save() {
@@ -160,28 +166,32 @@
     box.appendChild(t);
     setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 260); }, 1900);
   }
+  // one shared particle list + one rAF loop, so overlapping celebrations don't wipe each other
+  let confetti = [], confettiRunning = false;
   function celebrate(power) {
     const cv = document.getElementById('confetti'); if (!cv) return;
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const ctx = cv.getContext('2d'); const dpr = window.devicePixelRatio || 1;
-    cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; ctx.scale(dpr, dpr);
     const colors = ['#f2704f', '#12a594', '#8b5cf6', '#e8a317', '#5b5bf0', '#ef5350'];
     const n = Math.round(90 * (power || 1));
-    const ps = Array.from({ length: n }, () => ({
+    for (let k = 0; k < n && confetti.length < 400; k++) confetti.push({
       x: innerWidth / 2 + (Math.random() - .5) * 120, y: innerHeight * .45,
       vx: (Math.random() - .5) * 13, vy: -Math.random() * 13 - 4, r: Math.random() * 6 + 4,
-      c: colors[Math.floor(Math.random() * colors.length)], a: Math.random() * 6, va: (Math.random() - .5) * .3, shape: Math.random() < .5
-    }));
-    let frames = 0;
+      c: colors[Math.floor(Math.random() * colors.length)], a: Math.random() * 6, va: (Math.random() - .5) * .3, shape: Math.random() < .5, life: 150
+    });
+    if (confettiRunning) return;
+    confettiRunning = true;
+    cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     (function tick() {
       ctx.clearRect(0, 0, innerWidth, innerHeight);
-      ps.forEach(p => {
+      confetti = confetti.filter(p => --p.life > 0 && p.y < innerHeight + 40);
+      confetti.forEach(p => {
         p.vy += .35; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.a += p.va;
         ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a); ctx.fillStyle = p.c;
         if (p.shape) ctx.fillRect(-p.r / 2, -p.r / 4, p.r, p.r / 2); else { ctx.beginPath(); ctx.arc(0, 0, p.r / 2.4, 0, 7); ctx.fill(); }
         ctx.restore();
       });
-      if (++frames < 150) requestAnimationFrame(tick); else ctx.clearRect(0, 0, innerWidth, innerHeight);
+      if (confetti.length) requestAnimationFrame(tick); else { ctx.clearRect(0, 0, innerWidth, innerHeight); confettiRunning = false; }
     })();
   }
   function renderStats() {
@@ -314,6 +324,8 @@
       const check = h('button', { class: 'btn btn-primary', text: 'Check' });
       check.addEventListener('click', () => {
         if (answered) return;
+        if (!chosen.size) { fb.className = 'feedback'; fb.textContent = '👆 Tap one or more answers first.'; return; }
+        fb.textContent = '';
         const ans = new Set(q.answer);
         const correct = ans.size === chosen.size && [...ans].every(v => chosen.has(v));
         btns.forEach((x, j) => {
@@ -323,7 +335,7 @@
           } else if (chosen.has(order[j].v)) x.classList.add('picked');
         });
         check.disabled = true;
-        finish(correct, [...chosen].map(v => q.options[v]).join(', '));
+        finish(correct, [...chosen].sort((a, b) => a - b).map(v => q.options[v]).join('; '));
       });
       wrap.appendChild(box);
       wrap.appendChild(h('div', { class: 'q-actions' }, check));
@@ -341,12 +353,13 @@
       inp.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
       wrap.appendChild(h('div', { class: 'q-fill' }, inp, check));
       if (q.hint) wrap.appendChild(h('div', { class: 'tiny', style: { marginTop: '6px' }, html: '💡 ' + q.hint }));
-      setTimeout(() => { if (opts.autofocus) inp.focus(); }, 30);
+      // never scroll the page just to focus (quick checks sit at the bottom of long lessons)
+      setTimeout(() => { if (opts.autofocus && inp.isConnected) inp.focus({ preventScroll: true }); }, 30);
     } else if (q.type === 'match') {
       let mistakes = 0;
       const m = matchWidget(q.pairs, {
         onWrong: () => { mistakes++; },
-        onDone: () => finish(mistakes === 0, mistakes === 0 ? 'all matched' : mistakes + ' wrong tries'),
+        onDone: () => finish(mistakes === 0, mistakes === 0 ? 'all pairs right first time' : 'all matched after ' + mistakes + ' wrong pairing' + (mistakes > 1 ? 's' : '')),
         quiet: opts.instant === false
       });
       wrap.appendChild(m);
@@ -361,7 +374,7 @@
     if (q.type === 'tf') return q.answer ? 'True' : 'False';
     if (q.type === 'fill') return esc([].concat(q.answer)[0]);
     if (q.type === 'multi') return q.answer.map(i => q.options[i]).join('; ');
-    if (q.type === 'match') return q.pairs.map(p => p[0] + ' → ' + p[1]).join('; ');
+    if (q.type === 'match') return q.pairs.map(p => String(p[0]).replace(/\s*(→|&rarr;)\s*$/, '') + ' → ' + p[1]).join('; ');
     return '';
   }
 
@@ -415,11 +428,14 @@
       if (i >= qs.length) return end();
       bar.style.width = (i / qs.length * 100) + '%';
       count.textContent = (i + 1) + ' / ' + qs.length;
+      // keep keyboard focus inside the quiz when the old question is replaced (no trip back to the top bar)
+      const ae = document.activeElement;
+      const keepFocus = (i > 0 || opts.autofocus) && (!ae || ae === document.body || box.contains(ae));
       stage.innerHTML = '';
       const q = qs[i];
       const next = h('button', { class: 'btn btn-primary', text: i + 1 < qs.length ? 'Next →' : 'Finish', style: { display: 'none' } });
       const node = renderQuestion(q, {
-        instant: opts.mode !== 'exam', autofocus: true,
+        instant: opts.mode !== 'exam', autofocus: keepFocus,
         done: r => {
           items.push({ q, correct: r.correct, given: r.given });
           recordResult(q, r.correct);
@@ -431,6 +447,11 @@
       next.addEventListener('click', () => { i++; show(); });
       stage.appendChild(node);
       stage.appendChild(h('div', { class: 'q-actions' }, next));
+      if (keepFocus && q.type !== 'fill') { const f = node.querySelector('.q-opt, .match-item'); if (f) f.focus({ preventScroll: true }); }
+      if (i > 0) { // new question: if the quiz top has scrolled under the sticky top bar, bring it back into view
+        const tb = document.querySelector('.topbar'), top = box.getBoundingClientRect().top, off = (tb ? tb.offsetHeight : 0) + 12;
+        if (top < off) window.scrollBy({ top: top - off, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      }
     }
 
     function end() {
