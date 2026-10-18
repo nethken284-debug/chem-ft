@@ -278,12 +278,7 @@
     [78, 'Pt', 'platinum', 'me', 's', 6, 10], [79, 'Au', 'gold', 'me', 's', 6, 11], [80, 'Hg', 'mercury', 'me', 'l', 6, 12],
     [82, 'Pb', 'lead', 'me', 's', 6, 14]
   ].map(toEl(false));
-  // named elsewhere in the book (gas list of 1.3 and the semi-metal photos) — shown dashed in the 1.3 explorer
-  const EXTRAS = [
-    [36, 'Kr', 'krypton', 'nm', 'g', 4, 18], [54, 'Xe', 'xenon', 'nm', 'g', 5, 18], [86, 'Rn', 'radon', 'nm', 'g', 6, 18],
-    [32, 'Ge', 'germanium', 'se', 's', 4, 14], [33, 'As', 'arsenic', 'se', 's', 4, 15], [51, 'Sb', 'antimony', 'se', 's', 5, 15],
-    [52, 'Te', 'tellurium', 'se', 's', 5, 16]
-  ].map(toEl(true));
+  const EXTRAS = [];
   const ALL = ELS.concat(EXTRAS);
   const bySym = {}; ALL.forEach(e => { bySym[e.sym] = e; });
   const CLS = { me: 'Metal', nm: 'Non-metal', se: 'Semi-metal' };
@@ -1332,15 +1327,15 @@
   }
 
   function lessonClassify(root) {
-    const gases = ['hydrogen', 'helium', 'nitrogen', 'oxygen', 'fluorine', 'neon', 'chlorine', 'argon', 'krypton', 'xenon', 'radon'];
+    const gases = ['hydrogen', 'helium', 'nitrogen', 'oxygen', 'fluorine', 'neon', 'chlorine', 'argon'];
     root.appendChild(A.noteCard('By physical state (at room conditions)', `
       <ul>
-        <li><b>11 elements are gases</b>: ${gases.join(', ')}.</li>
+        <li><b>11 elements are gases</b>, e.g. ${gases.join(', ')}.</li>
         <li><b>2 elements are liquids</b>: <b>mercury</b> and <b>bromine</b>.</li>
         <li>The other elements are <b>solids</b>, e.g. iron, carbon, silicon.</li>
       </ul>`, 'Notes'));
 
-    const ex = A.playCard('Periodic table colour explorer', 'Switch the colours between <b>physical state</b> and <b>metal / semi-metal / non-metal</b>. Dashed tiles are extra elements named in the book.', '🎨 Explore');
+    const ex = A.playCard('Periodic table colour explorer', 'Switch the colours between <b>physical state</b> and <b>metal / semi-metal / non-metal</b>.', '🎨 Explore');
     let info = emptyInfo();
     const pt = periodicTable({ items: ALL, mode: 'state', onTap: (e, b) => { Object.values(pt.tiles).forEach(x => x.classList.remove('sel')); b.classList.add('sel'); A.sound('pop'); const n = elInfo(e); info.replaceWith(n); info = n; } });
     const legend = h('div', { class: 'c1-legend' });
@@ -1360,7 +1355,7 @@
         <li><b>${T('Non-metals', '非金屬')} can be solids, liquids or gases</b> (e.g. sulphur S, bromine Br, oxygen O).</li>
         <li>Some elements (e.g. boron B, silicon Si) are ${T('semi-metals', '半金屬')} (also called <b>${T('metalloids', '類金屬')}</b>). They have properties of <b>both metals and non-metals</b>.</li>
       </ul>`, 'Notes');
-    const ex3 = [['Metals in the book', 'cl-me', ['Cu', 'Pb', 'Sn', 'Ni', 'Zn']], ['Non-metals in the book', 'cl-nm', ['C', 'S']], ['Semi-metals in the book', 'cl-se', ['B', 'Si', 'Ge', 'As', 'Sb', 'Te']]];
+    const ex3 = [['Metals in the book', 'cl-me', ['Cu', 'Pb', 'Sn', 'Ni', 'Zn']], ['Non-metals in the book', 'cl-nm', ['C', 'S']], ['Semi-metals in the book', 'cl-se', ['B', 'Si']]];
     ex3.forEach(([t, c, syms]) => mn.appendChild(h('div', { class: 'c1-gap' }, h('span', { class: 'c1-label', text: t }),
       h('div', { class: 'c1-tags' }, syms.map(s => h('span', { class: 'c1-tag ' + c, html: '<b>' + s + '</b> ' + bySym[s].name }))))));
     mn.appendChild(h('p', { class: 'tiny', style: { marginTop: '10px', marginBottom: 0 }, text: 'The book also pictures steel — a mixture of elements (an alloy), which you will meet in Chapter 2.' }));
@@ -1371,7 +1366,7 @@
       ['iron <b>Fe</b>', 'me'], ['aluminium <b>Al</b>', 'me'], ['copper <b>Cu</b>', 'me'], ['lead <b>Pb</b>', 'me'], ['tin <b>Sn</b>', 'me'], ['zinc <b>Zn</b>', 'me'],
       ['mercury <b>Hg</b>', 'me', 'Mercury is a liquid — but it is still a metal!'], ['sodium <b>Na</b>', 'me'],
       ['sulphur <b>S</b>', 'nm'], ['bromine <b>Br</b>', 'nm', 'Bromine is a liquid non-metal.'], ['oxygen <b>O</b>', 'nm'], ['carbon <b>C</b>', 'nm', 'Carbon is a non-metal (diamond and graphite are forms of carbon).'], ['iodine <b>I</b>', 'nm'],
-      ['boron <b>B</b>', 'se', 'Boron has properties of both metals and non-metals.'], ['silicon <b>Si</b>', 'se', 'Silicon is a semi-metal — used in computer chips.'], ['germanium <b>Ge</b>', 'se', 'Germanium is one of the semi-metals pictured in the book.']
+      ['boron <b>B</b>', 'se', 'Boron has properties of both metals and non-metals.'], ['silicon <b>Si</b>', 'se', 'Silicon is a semi-metal — used in computer chips.']
     ].map(([label, bucket, hint]) => ({ label, bucket, hint }));
     sg.body.appendChild(A.sortGame({ buckets: [{ id: 'me', title: 'Metals', icon: '🔩' }, { id: 'se', title: 'Semi-metals', icon: '💻' }, { id: 'nm', title: 'Non-metals', icon: '🌫️' }], items, rewardKey: 'c1-sort-type', xp: 15 }));
     root.appendChild(sg);
@@ -2143,7 +2138,7 @@
     { type: 'match', q: 'Match each element to its description.', pairs: [['mercury', 'liquid metal'], ['bromine', 'liquid non-metal'], ['silicon', 'solid semi-metal'], ['chlorine', 'gaseous non-metal'], ['iron', 'solid metal']], explain: 'Mercury and bromine are the two liquid elements; silicon is a semi-metal.' },
     { type: 'mcq', q: 'Which element is a <b>gas</b> at room conditions?', options: ['neon', 'iodine', 'phosphorus', 'calcium'], answer: 0, explain: 'Neon is one of the 11 gaseous elements. Iodine, phosphorus and calcium are solids.' },
     { type: 'fill', q: 'Elements that have properties of both metals and non-metals are called semi-metals or ___.', answer: ['metalloids', 'metalloid'], explain: 'Semi-metals are also called metalloids.' },
-    { type: 'mcq', q: 'Which of these is a semi-metal?', options: ['germanium', 'gold', 'iodine', 'argon'], answer: 0, explain: 'The book pictures boron, silicon, germanium, arsenic, antimony and tellurium as semi-metals.' },
+    { type: 'mcq', q: 'Which of these is a semi-metal?', options: ['silicon', 'gold', 'iodine', 'argon'], answer: 0, explain: 'Silicon (like boron) is a semi-metal: it has properties of both metals and non-metals.' },
     { type: 'multi', q: 'Which of the following are <b>metals</b>?', options: ['tin', 'zinc', 'sulphur', 'nickel', 'carbon'], answer: [0, 1, 3], explain: 'Tin, zinc and nickel are metals. Sulphur and carbon are non-metals.' }
   ]);
 
