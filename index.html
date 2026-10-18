@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Chem FT · F.3 Chemistry</title>
+  <meta name="description" content="F.3 Chemistry — Chapter 0 to 2: learn, play and test yourself.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚗️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#/" aria-label="Home">
+      <span class="brand-mark">⚗️</span>
+      <span class="brand-text">Chem<b>FT</b></span>
+    </a>
+    <nav class="topnav" id="topnav"></nav>
+    <div class="top-stats">
+      <span class="pill pill-streak" id="streakPill" title="Day streak">🔥 <b id="streakVal">0</b></span>
+      <span class="pill pill-xp" id="xpPill" title="Experience points">⭐ <b id="xpVal">0</b> XP</span>
+      <button class="icon-btn" id="muteBtn" aria-label="Toggle sound" title="Sound on/off">🔊</button>
+    </div>
+  </header>
+
+  <main id="view" class="view" tabindex="-1"></main>
+
+  <nav class="bottomnav" id="bottomnav" aria-label="Main"></nav>
+
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+  <canvas id="confetti" class="confetti" aria-hidden="true"></canvas>
+
+  <script src="js/core.js"></script>
+  <script src="js/ch0.js"></script>
+  <script src="js/ch1.js"></script>
+  <script src="js/ch2.js"></script>
+  <script src="js/ch2b.js"></script>
+  <script src="js/exam.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
